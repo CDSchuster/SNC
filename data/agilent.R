@@ -5,7 +5,7 @@ library("ggfortify")
 library("heatmap3")
 library("a4")
 library("biomaRt")
-
+library("dplyr")
 #READING THE DATA
 targets=read.csv2("targets.csv", sep=",")
 raw_data=read.maimages(targets[,1], source="agilent")
@@ -95,9 +95,10 @@ heatmap_plot(top_table, nba_norm.avg$M)
 M_matrix=nba_norm.avg$M
 genes=nba_norm.avg$genes
 rownames(M_matrix)=genes$ProbeName
-
+M_matrix_cells=M_matrix[,6:8]
+colnames(M_matrix_cells)=c("Serum free", "IGF1 24 h", "IGF1 + OSI906 24 h")
 write.csv2(M_matrix, sep = ",", file="expression_matrix.csv")
-
+write.csv2(M_matrix_cells, sep = ",", file="probes.csv")
 
 ensembl = useMart("ensembl", dataset = "hsapiens_gene_ensembl")
 
